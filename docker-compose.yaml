@@ -15,13 +15,18 @@ services:
       - tskmngr_data:/var/lib/postgresql/data
 
   backend:
-    build: ./src
+    build: ./backend
     depends_on:
-      - db
+      - database
     environment:
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}"
     ports:
       - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4200:4200"
 
 volumes:
   tskmngr_data:
