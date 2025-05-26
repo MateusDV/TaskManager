@@ -1,4 +1,4 @@
-export interface LoginDTO {
+export interface CredentialsDTO {
     email: string,
     password: string,
 }

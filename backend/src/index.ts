@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from "cors";
 import tasks from './routes/tasks.route';
 import auth from './routes/auth.route';
 
@@ -12,7 +13,13 @@ if (!secret) {
 
 const app = express();
 
+
+app.use(cors({
+  origin: "http://localhost:4200",
+}));
+
 app.use(express.json());
+
 app.use("/auth", auth)
 app.use("/tasks", tasks);
 

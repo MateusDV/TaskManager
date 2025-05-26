@@ -1,0 +1,32 @@
+<mat-card class="login-card">
+  <mat-card-header class="login-card-header">
+    <mat-card-title>{{ this.isRegisterForm() ? "Register" : "Login" }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>E-mail</mat-label>
+        <input matInput placeholder="Email" formControlName="email" type="email">
+        <mat-error *ngIf="email?.errors">
+          Please enter a valid email address.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Password" formControlName="password" type="password">
+        <mat-error *ngIf="password?.errors">
+          Please enter a password of at least 4 digits.
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-stroked-button color="primary" type="button" (click)="toggleFormAction()" class="full-width">
+        {{ this.isRegisterForm() ? "Sign in" : "Sign up" }}
+      </button>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="loginForm.invalid" class="full-width">
+        {{ this.isRegisterForm() ? "Register" : "Login" }}
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
