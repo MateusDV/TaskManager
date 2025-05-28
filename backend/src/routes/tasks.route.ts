@@ -54,7 +54,7 @@ router.post("/", async function (req: Request<{}, {}, TaskDTO>, res) {
         data: {
             title: task.title,
             description: task.description,
-            endsAt: task.endsAt,
+            dueDate: task.dueDate,
             userId: task.userId,
         }
     });
