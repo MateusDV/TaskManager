@@ -2,7 +2,7 @@ import {computed, Injectable, signal} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Credentials} from '../../models/auth/credentials';
 import {catchError, lastValueFrom, Observable, of, tap, throwError,} from 'rxjs';
-import {toSignal} from '@angular/core/rxjs-interop';
+import {ResponseUtils} from '../../utils/response.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -33,16 +33,27 @@ export class AuthService {
         })
       );
 
-    return this.didRequestReturnError(request);
+    return ResponseUtils.didRequestReturnError(request);
   }
 
-  private async didRequestReturnError<T>(request: Observable<T>): Promise<boolean> {
-    try {
-      await lastValueFrom(request);
-      return true;
-    } catch (error) {
-      return false;
-    }
+  logout() {
+    this.tokenSignal.set(null);
+  }
+
+  async register(credentials: Credentials) {
+    const request = this.http.post<number>("http://localhost:3000/auth/register", credentials)
+      .pipe(
+        tap(() => {
+          this.errorSignal.set(null);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          const errorMessage = this.handleRegisterError(error)
+          this.errorSignal.set(errorMessage);
+          return throwError(() => error);
+        })
+      );
+
+    return ResponseUtils.didRequestReturnError(request);
   }
 
   private handleLoginError(error: HttpErrorResponse): string {
@@ -59,5 +70,25 @@ export class AuthService {
     }
 
     return `Login failed (Error ${error.status})`;
+  }
+
+  private handleRegisterError(error: HttpErrorResponse): string {
+    if (error.error instanceof ErrorEvent) {
+      return 'A network error occurred. Please try again.';
+    }
+
+    if (error.status === 400) {
+      return 'Invalid credentials. Please try again.';
+    }
+
+    if (error.status === 409) {
+      return 'User already exists. Please try again.';
+    }
+
+    if (error.status === 500) {
+      return 'Server error. Please try again later.';
+    }
+
+    return `Register failed (Error ${error.status})`;
   }
 }

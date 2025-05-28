@@ -1,5 +1,5 @@
 import {Component, inject, signal} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroupDirective, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Credentials} from '../../models/auth/credentials';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
@@ -56,7 +56,7 @@ export class AuthComponent {
     return this.loginForm.get('password');
   }
 
-  async onSubmit() {
+  async onLoginSubmit() {
     if (this.loginForm.invalid) {
       return;
     }
@@ -69,5 +69,22 @@ export class AuthComponent {
     }
 
     this.router.navigate(['/tasks']);
+  }
+
+  async onRegisterSubmit(form: FormGroupDirective) {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    const credentials = this.loginForm.value as Credentials;
+    const success = await this.authService.register(credentials);
+    if (!success) {
+      alert(this.authService.error());
+      return;
+    }
+
+    alert("User registered successfully.");
+    form.resetForm();
+    this.toggleFormAction();
   }
 }

@@ -1,2 +1,10 @@
-<p>Testando</p>
-<router-outlet />
+<mat-toolbar class="toolbar">
+  <span>Task Manager</span>
+  <span class="example-spacer"></span>
+  <button mat-flat-button (click)="logout()" [hidden]="!this.authService.token()">Logout</button>
+</mat-toolbar>
+
+<div class="parent-container">
+  <router-outlet />
+</div>
+

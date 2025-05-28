@@ -3,8 +3,9 @@
     <mat-card-title>{{ this.isRegisterForm() ? "Register" : "Login" }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline" class="full-width">
+    <form [formGroup]="loginForm" #form="ngForm"
+          (ngSubmit)="this.isRegisterForm() ? onRegisterSubmit(form) : onLoginSubmit()">
+      <mat-form-field class="full-width">
         <mat-label>E-mail</mat-label>
         <input matInput placeholder="Email" formControlName="email" type="email">
         <mat-error *ngIf="email?.errors">
@@ -12,7 +13,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field class="full-width">
         <mat-label>Password</mat-label>
         <input matInput placeholder="Password" formControlName="password" type="password">
         <mat-error *ngIf="password?.errors">

@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Or any height constraint */
+}
+
+.parent-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.toolbar {
+  background-color: #b2d7fa;
+}
