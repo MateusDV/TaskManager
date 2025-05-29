@@ -2,6 +2,7 @@ import express, {NextFunction, Request, RequestHandler, Response} from "express"
 import {PrismaClient, Task} from '../generated/prisma';
 import {TaskDTO} from "../dtos/tasks";
 import jwt from "jsonwebtoken";
+import TaskAdapter from "../adapters/task.adapter";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -36,9 +37,20 @@ router.use(async function (req: Request, res: Response, next: NextFunction) {
 
 router.get("/", async function (req, res: Response<TaskDTO[]>) {
     const userId = res.locals.id;
-    const tasks = await prisma.task.findMany({where: {userId: userId}});
+    const tasks = await prisma.task.findMany({
+        where: {userId: userId}, orderBy: [
+            {
+                dueDate: 'asc'
+            },
+            {
+                id: 'asc'
+            }
+        ]
+    });
 
-    res.status(200).json(tasks as TaskDTO[]);
+    const result = tasks.map((task) => TaskAdapter.toDTO(task));
+
+    res.status(200).json(result);
 });
 
 router.post("/", async function (req: Request<{}, {}, TaskDTO>, res) {
@@ -103,7 +115,7 @@ router.delete("/:id", async function (req, res) {
             }
         });
 
-        res.sendStatus(200);
+        res.sendStatus(204);
     } catch (error) {
         res.status(400).json(`Task with id ${id} doesn't exist.`);
     }

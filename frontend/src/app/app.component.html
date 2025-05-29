@@ -5,6 +5,13 @@
 </mat-toolbar>
 
 <div class="parent-container">
-  <router-outlet />
+  <router-outlet/>
 </div>
+
+@if (this.loadingService.isLoading()){
+  <div class="spinner-overlay">
+    <mat-spinner></mat-spinner>
+  </div>
+}
+
 

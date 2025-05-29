@@ -33,7 +33,7 @@ export class AuthService {
         })
       );
 
-    return ResponseUtils.didRequestReturnError(request);
+    return ResponseUtils.didRequestCompleteSuccessfully(request);
   }
 
   logout() {
@@ -53,7 +53,7 @@ export class AuthService {
         })
       );
 
-    return ResponseUtils.didRequestReturnError(request);
+    return ResponseUtils.didRequestCompleteSuccessfully(request);
   }
 
   private handleLoginError(error: HttpErrorResponse): string {

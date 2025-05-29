@@ -1,1 +1,63 @@
-<p>main works!</p>
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="side" opened>
+    <button mat-fab (click)="openNew()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <mat-list>
+      @for (task of tasks; track task) {
+        <mat-list-item>
+          <h3 matListItemTitle>{{ task.title }}</h3>
+          <p matListItemLine>{{ task.dueDate | date: "dd/MM/yyyy" }}</p>
+          <p matListItemLine>{{ task.description }}</p>
+          <div matListItemMeta>
+            <button mat-icon-button color="primary" (click)="openEdition(task.id)" aria-label="Edit task">
+              <mat-icon>edit_outline</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="delete(task.id)" aria-label="Delete task">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      }
+    </mat-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" [hidden]="!formIsOpen()">
+      <mat-form-field class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput placeholder="Email" formControlName="title" type="email">
+        <mat-error *ngIf="this.taskForm.get('title')?.errors">
+          Please enter a title.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput placeholder="Description" formControlName="description" type="text"></textarea>
+        <mat-error *ngIf="this.taskForm.get('description')?.errors">
+          Please enter a description.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Due date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dueDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="taskForm.invalid" class="full-width">
+        {{ isEditForm() ? "Edit" : "Add" }}
+      </button>
+      <button mat-flat-button color="primary" type="button" [hidden]="!isEditForm()" class="full-width">
+        Delete
+      </button>
+      <button mat-stroked-button color="primary" type="button" (click)="cancel()" class="full-width">
+        {{ taskForm.touched ? "Cancel" : "Close" }}
+      </button>
+    </form>
+    <span style="margin: 2rem auto">Create a new task (+) or select one on the list to edit.</span>
+  </mat-drawer-content>
+</mat-drawer-container>

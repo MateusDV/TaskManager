@@ -17,3 +17,16 @@
 .toolbar {
   background-color: #b2d7fa;
 }
+
+.spinner-overlay {
+  position: fixed; /* Stick to the viewport */
+  top: 0;
+  left: 0;
+  width: 100%;    /* Cover the full width */
+  height: 100%;   /* Cover the full height */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex; /* Enable flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center;    /* Center vertically */
+  z-index: 9999; /* Ensure it's on top of other content */
+}
