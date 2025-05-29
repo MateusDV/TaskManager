@@ -88,7 +88,6 @@ export class MainComponent implements OnInit {
   }
 
   async loadTasks() {
-    // TODO: Add some artificial delay
     this.loadingService.startLoading();
     this.tasks = await this.tasksService.getAll();
     this.loadingService.stopLoading();
@@ -100,8 +99,6 @@ export class MainComponent implements OnInit {
     }
 
     const task = this.taskForm.value as Task;
-
-    console.log(task);
 
     const result = this.isEditForm()
       ? await this.tasksService.edit(task)
@@ -117,12 +114,12 @@ export class MainComponent implements OnInit {
     alert("Task was not added, please try again.");
   }
 
-  openNew() {
+  openNewTask() {
     this.taskId.set(0);
     this.taskForm.reset();
   }
 
-  openEdition(taskId: number) {
+  openEditTask(taskId: number) {
     const task = this.tasks.find((t) => t.id === taskId);
     this.taskId.set(taskId);
     if (task) {
@@ -135,17 +132,19 @@ export class MainComponent implements OnInit {
     this.taskId.set(null);
   }
 
-  async delete(taskId: number) {
+  async deleteTask(taskId: number) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (!task) {
+      alert("Task not found.");
       return;
     }
 
     const result = await this.tasksService.delete(task);
-    console.log(result);
     if (result) {
       alert("Task was deleted successfully.");
       await this.loadTasks();
     }
+
+    alert(`Failed to delete task ${task.title}. Try again later.`);
   }
 }

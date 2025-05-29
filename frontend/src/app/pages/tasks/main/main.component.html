@@ -1,6 +1,6 @@
 <mat-drawer-container class="example-container">
   <mat-drawer mode="side" opened>
-    <button mat-fab (click)="openNew()">
+    <button mat-fab (click)="openNewTask()">
       <mat-icon>add</mat-icon>
     </button>
     <mat-list>
@@ -10,10 +10,10 @@
           <p matListItemLine>{{ task.dueDate | date: "dd/MM/yyyy" }}</p>
           <p matListItemLine>{{ task.description }}</p>
           <div matListItemMeta>
-            <button mat-icon-button color="primary" (click)="openEdition(task.id)" aria-label="Edit task">
+            <button mat-icon-button color="primary" (click)="openEditTask(task.id)" aria-label="Edit task">
               <mat-icon>edit_outline</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="delete(task.id)" aria-label="Delete task">
+            <button mat-icon-button color="warn" (click)="deleteTask(task.id)" aria-label="Delete task">
               <mat-icon>delete_outline</mat-icon>
             </button>
           </div>
@@ -26,7 +26,7 @@
     <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" [hidden]="!formIsOpen()">
       <mat-form-field class="full-width">
         <mat-label>Title</mat-label>
-        <input matInput placeholder="Email" formControlName="title" type="email">
+        <input matInput placeholder="Title" formControlName="title" type="text">
         <mat-error *ngIf="this.taskForm.get('title')?.errors">
           Please enter a title.
         </mat-error>
@@ -34,7 +34,7 @@
 
       <mat-form-field class="full-width">
         <mat-label>Description</mat-label>
-        <textarea matInput placeholder="Description" formControlName="description" type="text"></textarea>
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
         <mat-error *ngIf="this.taskForm.get('description')?.errors">
           Please enter a description.
         </mat-error>

@@ -7,6 +7,7 @@ import TaskAdapter from "../adapters/task.adapter";
 const router = express.Router();
 const prisma = new PrismaClient();
 
+// TODO: Send auth middleware to its own file
 router.use(async function (req: Request, res: Response, next: NextFunction) {
     const authorization = req.headers.authorization;
     const token = authorization?.split(' ')[1];
@@ -94,7 +95,7 @@ router.put("/:id", async function (req: Request<{}, {}, TaskDTO>, res) {
 
         res.status(200).json(result);
     } catch (error) {
-        res.status(400).json(`Task with id ${task.id} doesn't exist.`);
+        res.status(404).json(`Task with id ${task.id} doesn't exist.`);
     }
 });
 
@@ -117,7 +118,7 @@ router.delete("/:id", async function (req, res) {
 
         res.sendStatus(204);
     } catch (error) {
-        res.status(400).json(`Task with id ${id} doesn't exist.`);
+        res.status(404).json(`Task with id ${id} doesn't exist.`);
     }
 });
 
