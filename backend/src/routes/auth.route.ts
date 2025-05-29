@@ -10,14 +10,8 @@ const prisma = new PrismaClient();
 
 router.post("/login", async function (req: Request<{}, {}, CredentialsDTO>, res) {
     const user = await prisma.user.findUnique({where: {email: req.body.email}});
-    if (!user) {
-        res.status(404).json(`User ${req.body.email} not found.`);
-        return;
-    }
-
-    const isValid = await bcrypt.compare(req.body.password, user.password);
-    if (!isValid) {
-        res.status(401).json(`The password is incorrect.`);
+    if (!user || await bcrypt.compare(req.body.password, user.password)) {
+        res.status(401).json(`The email and/or password is incorrect.`);
         return;
     }
 

@@ -83,7 +83,7 @@ export class AuthComponent {
       return;
     }
 
-    alert("User registered successfully.");
+    alert("User registered successfully. Please login with your credentials.");
     form.resetForm();
     this.toggleFormAction();
   }
