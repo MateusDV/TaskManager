@@ -20,6 +20,8 @@ services:
       - database
     environment:
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}"
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      FRONTEND_CORS_URL: ${FRONTEND_CORS_URL}
     ports:
       - "3000:3000"
 
