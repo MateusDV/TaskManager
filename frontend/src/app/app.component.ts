@@ -22,8 +22,6 @@ export class AppComponent {
   routerService = inject(Router);
   loadingService = inject(LoadingService);
 
-  title = 'Task Manager';
-
   async logout() {
     this.authService.logout();
     await this.routerService.navigate(['auth']);
