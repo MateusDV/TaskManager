@@ -3,6 +3,7 @@ import {computed, Injectable, signal} from '@angular/core';
 import { Task } from '../../models/task/task';
 import {catchError, tap, throwError} from 'rxjs';
 import {ResponseUtils} from '../../utils/response.utils';
+import TaskAdapter from '../../utils/adapters/task.adapter';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,8 @@ export class TasksService {
   }
 
   async add(task: Task){
-    const request = this.http.post("http://localhost:3000/tasks", task);
+    const dto = TaskAdapter.toTaskCreateDTO(task);
+    const request = this.http.post("http://localhost:3000/tasks", dto);
     return ResponseUtils.didRequestCompleteSuccessfully(request);
   }
 

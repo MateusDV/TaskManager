@@ -1,4 +1,4 @@
-<mat-drawer-container class="example-container">
+<mat-drawer-container class="container">
   <mat-drawer mode="side" opened>
     <button mat-fab (click)="openNewTask()">
       <mat-icon>add</mat-icon>
@@ -8,7 +8,7 @@
         <mat-list-item>
           <h3 matListItemTitle>{{ task.title }}</h3>
           <p matListItemLine>{{ task.dueDate | date: "dd/MM/yyyy" }}</p>
-          <p matListItemLine>{{ task.description }}</p>
+          <p matListItemLine>{{ task.dueDate | statusText: task.isCompleted }}</p>
           <div matListItemMeta>
             <button mat-icon-button color="primary" (click)="openEditTask(task.id)" aria-label="Edit task">
               <mat-icon>edit_outline</mat-icon>
@@ -22,17 +22,30 @@
       }
     </mat-list>
   </mat-drawer>
-  <mat-drawer-content>
+  <mat-drawer-content class="content">
+    @if (formIsOpen()){
+      <h2>{{ isEditForm() ? "Edit task" : "New task" }}</h2>
+    }
     <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" [hidden]="!formIsOpen()">
-      <mat-form-field class="full-width">
-        <mat-label>Title</mat-label>
-        <input matInput placeholder="Title" formControlName="title" type="text">
-        <mat-error *ngIf="this.taskForm.get('title')?.errors">
-          Please enter a title.
-        </mat-error>
-      </mat-form-field>
+      <p>
+        <mat-form-field class="field">
+          <mat-label>Title</mat-label>
+          <input matInput placeholder="Title" formControlName="title" type="text">
+          <mat-error *ngIf="this.taskForm.get('title')?.errors">
+            Please enter a title.
+          </mat-error>
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
+        <mat-form-field class="field">
+          <mat-label>Due date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dueDate">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </p>
+
+      <mat-form-field class="field">
         <mat-label>Description</mat-label>
         <textarea matInput placeholder="Description" formControlName="description"></textarea>
         <mat-error *ngIf="this.taskForm.get('description')?.errors">
@@ -40,24 +53,24 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Due date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="dueDate">
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+      @if (isEditForm()) {
+        <mat-checkbox formControlName="isCompleted">Completed</mat-checkbox>
+      }
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="taskForm.invalid" class="full-width">
-        {{ isEditForm() ? "Edit" : "Add" }}
-      </button>
-      <button mat-flat-button color="primary" type="button" [hidden]="!isEditForm()" class="full-width">
-        Delete
-      </button>
-      <button mat-stroked-button color="primary" type="button" (click)="cancel()" class="full-width">
-        {{ taskForm.touched ? "Cancel" : "Close" }}
-      </button>
+      <p class="field">
+        <button mat-flat-button color="primary" type="submit" [disabled]="taskForm.invalid || !taskForm.dirty">
+          {{ isEditForm() ? "Edit" : "Add" }}
+        </button>
+        <button mat-flat-button color="secondary" type="button" [hidden]="!isEditForm()">
+          Delete
+        </button>
+        <button mat-stroked-button color="primary" type="button" (click)="cancel()">
+          {{ taskForm.touched ? "Cancel" : "Close" }}
+        </button>
+      </p>
     </form>
-    <span style="margin: 2rem auto">Create a new task (+) or select one on the list to edit.</span>
+    @if (!formIsOpen()){
+      <span style="margin: 2rem auto">Create a new task (+) or select one on the list to edit.</span>
+    }
   </mat-drawer-content>
 </mat-drawer-container>

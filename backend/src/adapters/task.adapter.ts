@@ -8,6 +8,7 @@ export default class TaskAdapter {
             title: task.title,
             description: task.description,
             dueDate: task.dueDate,
+            isCompleted: task.isCompleted
         };
     }
 }

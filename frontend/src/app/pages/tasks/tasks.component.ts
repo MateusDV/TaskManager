@@ -23,6 +23,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {LoadingService} from '../../services/utils/loading/loading.service';
 import {AlertService} from '../../services/utils/alert/alert.service';
+import {MatCheckbox, MatCheckboxModule} from '@angular/material/checkbox';
+import {StatusTextPipe} from '../../utils/pipes/status/status-text.pipe';
 
 @Component({
   selector: 'app-tasks',
@@ -51,7 +53,10 @@ import {AlertService} from '../../services/utils/alert/alert.service';
     MatFormFieldModule,
     NgIf,
     MatIconButton,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckbox,
+    MatCheckboxModule,
+    StatusTextPipe
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './tasks.component.html',
@@ -73,6 +78,7 @@ export class TasksComponent implements OnInit {
     title: '',
     description: '',
     dueDate: new Date(),
+    isCompleted: false
   }
 
   tasks: Task[] = [];
@@ -82,6 +88,7 @@ export class TasksComponent implements OnInit {
     title: [this.taskModel.title, Validators.required],
     description: [this.taskModel.description, Validators.required],
     dueDate: [this.taskModel.dueDate, Validators.required,],
+    isCompleted: [this.taskModel.isCompleted],
   });
 
   constructor() { }
@@ -108,9 +115,9 @@ export class TasksComponent implements OnInit {
       : await this.tasksService.add(task);
 
     if (result) {
-      // TODO: Add angular-material dialogs.
-      this.alertsService.open("Task added successfully.");
+      this.alertsService.open(this.isEditForm() ? "Task updated successfully" : "Task added successfully.");
       this.taskId.set(null);
+      this.taskForm.reset();
       await this.loadTasks();
       return;
     }

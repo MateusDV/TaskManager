@@ -41,6 +41,9 @@ router.get("/", async function (req, res: Response<TaskDTO[]>) {
     const tasks = await prisma.task.findMany({
         where: {userId: userId}, orderBy: [
             {
+                isCompleted: 'asc'
+            },
+            {
                 dueDate: 'asc'
             },
             {
