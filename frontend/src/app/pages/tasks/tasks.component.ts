@@ -3,8 +3,8 @@ import {MatDrawer, MatDrawerContainer, MatDrawerContent} from '@angular/material
 import {
   MatTableModule
 } from '@angular/material/table';
-import {TasksService} from '../../../services/tasks/tasks.service';
-import {Task} from '../../../models/task/task'
+import {TasksService} from '../../services/tasks/tasks.service';
+import {Task} from '../../models/task/task'
 import {MatList, MatListItem, MatListModule} from '@angular/material/list';
 import {DatePipe, NgIf} from '@angular/common';
 import {MatFormField, MatInput} from '@angular/material/input';
@@ -21,11 +21,11 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
-import {LoadingService} from '../../../services/utils/loading/loading.service';
-import {AlertService} from '../../../services/utils/alert/alert.service';
+import {LoadingService} from '../../services/utils/loading/loading.service';
+import {AlertService} from '../../services/utils/alert/alert.service';
 
 @Component({
-  selector: 'app-main',
+  selector: 'app-tasks',
   imports: [
     MatTableModule,
     MatDrawerContainer,
@@ -54,10 +54,10 @@ import {AlertService} from '../../../services/utils/alert/alert.service';
     MatButtonModule
   ],
   providers: [provideNativeDateAdapter()],
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+  templateUrl: './tasks.component.html',
+  styleUrl: './tasks.component.css'
 })
-export class MainComponent implements OnInit {
+export class TasksComponent implements OnInit {
   readonly tasksService = inject(TasksService);
   readonly loadingService = inject(LoadingService);
   readonly alertsService = inject(AlertService);
