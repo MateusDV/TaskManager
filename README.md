@@ -33,4 +33,8 @@ After the tooling is installed and the Docker service is running, you can open a
 
 This should build and run all three containers, and by accessing `http://localhost:4200` in your preferred browser, you should see the login screen.
 
+### Test Data
 
+To comply with the assigment requirements, two users were seeded in the database:
+1. user: `alice@example.com` password: `securepassword1`
+2. user: `bob@example.com`   password: `securepassword2`
