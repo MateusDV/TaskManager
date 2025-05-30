@@ -4,7 +4,7 @@
       <mat-icon>add</mat-icon>
     </button>
     <mat-list>
-      @for (task of tasks; track task) {
+      @for (task of tasks; track task.id) {
         <mat-list-item>
           <h3 matListItemTitle>{{ task.title }}</h3>
           <p matListItemLine>{{ task.dueDate | date: "dd/MM/yyyy" }}</p>
