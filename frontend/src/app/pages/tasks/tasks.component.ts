@@ -144,6 +144,12 @@ export class TasksComponent implements OnInit {
   }
 
   async deleteTask(taskId: number) {
+    // TODO: Move to AlertService and use Angular Material dialog
+    const confirmation = confirm("Are you sure you want to delete this task?");
+    if (!confirmation) {
+      return;
+    }
+
     const task = this.tasks.find((t) => t.id === taskId);
     if (!task) {
       this.alertsService.open("Task not found.");
@@ -154,6 +160,7 @@ export class TasksComponent implements OnInit {
     if (result) {
       this.alertsService.open("Task was deleted successfully.");
       await this.loadTasks();
+      return;
     }
 
     this.alertsService.open(`Failed to delete task ${task.title}. Try again later.`);

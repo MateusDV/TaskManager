@@ -61,7 +61,7 @@
         <button mat-flat-button color="primary" type="submit" [disabled]="taskForm.invalid || !taskForm.dirty">
           {{ isEditForm() ? "Edit" : "Add" }}
         </button>
-        <button mat-flat-button color="secondary" type="button" [hidden]="!isEditForm()">
+        <button mat-flat-button color="primary" (click)="deleteTask(taskId()!)" type="button" [hidden]="!isEditForm()">
           Delete
         </button>
         <button mat-stroked-button color="primary" type="button" (click)="cancel()">
