@@ -27,7 +27,7 @@ To run this project, it's necessary to install the Docker tooling.
 
 I would recommend installing Docker Desktop since it comes bundled with all the tools, but you can also install the Docker Engine, Docker CLI and the Docker Compose plugin individually.
 
-After the tooling is installed and the Docker service is running, you can open a terminal in the root directory of this project and run:
+After the tooling is installed and the Docker service is running, you have to clone this repository, then you can open a terminal in the root directory of this project and run:
 
 `docker-compose up -d`
 
