@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {MatDrawer, MatDrawerContainer, MatDrawerContent} from '@angular/material/sidenav';
 import {
   MatTableModule
@@ -9,7 +9,7 @@ import {MatList, MatListItem, MatListModule} from '@angular/material/list';
 import {DatePipe, NgIf} from '@angular/common';
 import {MatFormField, MatInput} from '@angular/material/input';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatButton, MatButtonModule, MatFabButton, MatIconButton} from '@angular/material/button';
+import {MatButton, MatButtonModule, MatIconButton} from '@angular/material/button';
 import {MatHint, MatLabel} from '@angular/material/form-field';
 import {
   MatDatepicker,
@@ -22,6 +22,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {LoadingService} from '../../../services/utils/loading/loading.service';
+import {AlertService} from '../../../services/utils/alert/alert.service';
 
 @Component({
   selector: 'app-main',
@@ -57,9 +58,11 @@ import {LoadingService} from '../../../services/utils/loading/loading.service';
   styleUrl: './main.component.css'
 })
 export class MainComponent implements OnInit {
-  tasksService = inject(TasksService);
-  loadingService = inject(LoadingService);
-  builder = inject(FormBuilder);
+  readonly tasksService = inject(TasksService);
+  readonly loadingService = inject(LoadingService);
+  readonly alertsService = inject(AlertService);
+  readonly builder = inject(FormBuilder);
+
 
   taskId = signal<number|null>(null);
   formIsOpen = computed<boolean>(() => this.taskId() !== null);
@@ -105,13 +108,14 @@ export class MainComponent implements OnInit {
       : await this.tasksService.add(task);
 
     if (result) {
-      alert("Task added successfully.");
+      // TODO: Add angular-material dialogs.
+      this.alertsService.open("Task added successfully.");
       this.taskId.set(null);
       await this.loadTasks();
       return;
     }
 
-    alert("Task was not added, please try again.");
+    this.alertsService.open("Task was not added, please try again.");
   }
 
   openNewTask() {
@@ -135,16 +139,16 @@ export class MainComponent implements OnInit {
   async deleteTask(taskId: number) {
     const task = this.tasks.find((t) => t.id === taskId);
     if (!task) {
-      alert("Task not found.");
+      this.alertsService.open("Task not found.");
       return;
     }
 
     const result = await this.tasksService.delete(task);
     if (result) {
-      alert("Task was deleted successfully.");
+      this.alertsService.open("Task was deleted successfully.");
       await this.loadTasks();
     }
 
-    alert(`Failed to delete task ${task.title}. Try again later.`);
+    this.alertsService.open(`Failed to delete task ${task.title}. Try again later.`);
   }
 }

@@ -8,6 +8,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/mat
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth/auth.service';
+import {AlertService} from '../../services/utils/alert/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -37,6 +38,7 @@ export class AuthComponent {
 
   private formBuilder = inject(FormBuilder);
   private authService = inject(AuthService);
+  private alertService = inject(AlertService);
   private router = inject(Router);
 
   toggleFormAction() {
@@ -64,7 +66,7 @@ export class AuthComponent {
     const credentials = this.loginForm.value as Credentials;
     const success = await this.authService.login(credentials);
     if (!success) {
-      alert(this.authService.error());
+      this.alertService.open(this.authService.error() ?? '');
       return;
     }
 
@@ -79,11 +81,11 @@ export class AuthComponent {
     const credentials = this.loginForm.value as Credentials;
     const success = await this.authService.register(credentials);
     if (!success) {
-      alert(this.authService.error());
+      this.alertService.open(this.authService.error() ?? '');
       return;
     }
 
-    alert("User registered successfully. Please login with your credentials.");
+    this.alertService.open("User registered successfully. Please login with your credentials.");
     form.resetForm();
     this.toggleFormAction();
   }
